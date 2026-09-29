@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - HINDSIGHT_BASE_URL=https://api.hindsight.vectorize.io
+      - HINDSIGHT_BANK_ID=proposal-agent
+      - GROQ_MODEL=openai/gpt-oss-120b
+      - DATABASE_URL=sqlite:///./proposal_agent.db
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
